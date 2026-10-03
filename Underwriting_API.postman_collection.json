@@ -1,0 +1,1149 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Underwriting API - Ratio Code Exercise",
+		"description": "Complete API collection for the Ratio Code Exercise Underwriting API. Includes all Customer and User management endpoints with examples.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345678"
+	},
+	"item": [
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Get All Customers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/customers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"customers"
+							]
+						},
+						"description": "Retrieve all customers in the system"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/v1/customers",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"customers"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"name\": \"Acme Corporation\",\n    \"taxIdentifier\": \"12-3456789\",\n    \"createdDate\": \"2024-01-15T10:30:00Z\",\n    \"createdBy\": \"123e4567-e89b-12d3-a456-426614174001\",\n    \"lastModifiedBy\": \"123e4567-e89b-12d3-a456-426614174001\",\n    \"lastModifiedDate\": \"2024-01-15T10:30:00Z\"\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "Create Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Acme Corporation\",\n  \"taxIdentifier\": \"12-3456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/customers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"customers"
+							]
+						},
+						"description": "Create a new customer with name and tax identifier"
+					},
+					"response": [
+						{
+							"name": "Created Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Acme Corporation\",\n  \"taxIdentifier\": \"12-3456789\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/customers",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"customers"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Location",
+									"value": "{{base_url}}/v1/customers/123e4567-e89b-12d3-a456-426614174000"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Get Customer by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/customers/{{customer_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"customers",
+								"{{customer_id}}"
+							]
+						},
+						"description": "Retrieve a specific customer by their UUID"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/v1/customers/123e4567-e89b-12d3-a456-426614174000",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"customers",
+										"123e4567-e89b-12d3-a456-426614174000"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"name\": \"Acme Corporation\",\n  \"taxIdentifier\": \"12-3456789\",\n  \"createdDate\": \"2024-01-15T10:30:00Z\",\n  \"createdBy\": \"123e4567-e89b-12d3-a456-426614174001\",\n  \"lastModifiedBy\": \"123e4567-e89b-12d3-a456-426614174001\",\n  \"lastModifiedDate\": \"2024-01-15T10:30:00Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Customer (PATCH)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"op\": \"replace\",\n    \"path\": \"/name\",\n    \"value\": \"Updated Corporation Name\"\n  },\n  {\n    \"op\": \"replace\",\n    \"path\": \"/taxIdentifier\",\n    \"value\": \"98-7654321\"\n  }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/customers/{{customer_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"customers",
+								"{{customer_id}}"
+							]
+						},
+						"description": "Update customer using JSON Patch format"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json-patch+json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"op\": \"replace\",\n    \"path\": \"/name\",\n    \"value\": \"Updated Corporation Name\"\n  }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/customers/123e4567-e89b-12d3-a456-426614174000",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"customers",
+										"123e4567-e89b-12d3-a456-426614174000"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"name\": \"Updated Corporation Name\",\n  \"taxIdentifier\": \"12-3456789\",\n  \"createdDate\": \"2024-01-15T10:30:00Z\",\n  \"createdBy\": \"123e4567-e89b-12d3-a456-426614174001\",\n  \"lastModifiedBy\": \"123e4567-e89b-12d3-a456-426614174001\",\n  \"lastModifiedDate\": \"2024-01-15T11:45:00Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Customer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/customers/{{customer_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"customers",
+								"{{customer_id}}"
+							]
+						},
+						"description": "Delete a customer by their UUID"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/v1/customers/123e4567-e89b-12d3-a456-426614174000",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"customers",
+										"123e4567-e89b-12d3-a456-426614174000"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"description": "Customer management endpoints for creating, reading, updating, and deleting customers"
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"users"
+							]
+						},
+						"description": "Retrieve all users in the system"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/v1/users",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"users"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"id\": \"456e7890-e12b-34d5-a678-901234567890\",\n    \"email\": \"john.doe@example.com\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"fullName\": \"John Doe\",\n    \"title\": \"Senior Developer\",\n    \"phoneNumber\": \"+1-555-123-4567\"\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"title\": \"Senior Developer\",\n  \"phoneNumber\": \"+1-555-123-4567\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"users"
+							]
+						},
+						"description": "Create a new user with personal information"
+					},
+					"response": [
+						{
+							"name": "Created Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"title\": \"Senior Developer\",\n  \"phoneNumber\": \"+1-555-123-4567\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/users",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"users"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Location",
+									"value": "{{base_url}}/v1/users/456e7890-e12b-34d5-a678-901234567890"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/v1/users/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Retrieve a specific user by their UUID"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/v1/users/456e7890-e12b-34d5-a678-901234567890",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"users",
+										"456e7890-e12b-34d5-a678-901234567890"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"456e7890-e12b-34d5-a678-901234567890\",\n  \"email\": \"john.doe@example.com\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"fullName\": \"John Doe\",\n  \"title\": \"Senior Developer\",\n  \"phoneNumber\": \"+1-555-123-4567\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update User (PATCH)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"op\": \"replace\",\n    \"path\": \"/title\",\n    \"value\": \"Lead Developer\"\n  },\n  {\n    \"op\": \"replace\",\n    \"path\": \"/phoneNumber\",\n    \"value\": \"+1-555-987-6543\"\n  }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/users/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Update user using JSON Patch format"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json-patch+json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"op\": \"replace\",\n    \"path\": \"/title\",\n    \"value\": \"Lead Developer\"\n  }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/users/456e7890-e12b-34d5-a678-901234567890",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"users",
+										"456e7890-e12b-34d5-a678-901234567890"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"456e7890-e12b-34d5-a678-901234567890\",\n  \"email\": \"john.doe@example.com\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"fullName\": \"John Doe\",\n  \"title\": \"Lead Developer\",\n  \"phoneNumber\": \"+1-555-123-4567\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/users/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Delete a user by their UUID"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/v1/users/456e7890-e12b-34d5-a678-901234567890",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"v1",
+										"users",
+										"456e7890-e12b-34d5-a678-901234567890"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"description": "User management endpoints for creating, reading, updating, and deleting users"
+		},
+		{
+			"name": "Experian Mock API (WireMock)",
+			"item": [
+				{
+					"name": "Get Credit Score - High Score",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{experian_base_url}}/api/v1/credit-score?taxIdentifier=12345678",
+							"host": [
+								"{{experian_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"credit-score"
+							],
+							"query": [
+								{
+									"key": "taxIdentifier",
+									"value": "12345678",
+									"description": "Business tax identifier"
+								}
+							]
+						},
+						"description": "Get credit score from Experian mock API. This endpoint is mocked using WireMock and returns pre-configured responses based on the tax identifier.\n\nExample tax identifiers:\n- 12345678: High credit score (800)\n- 98765432: Low credit score (300)\n- 44444444: Business not found\n- 11111111: Timeout (31 seconds)\n- 22222222: Service unavailable (503)\n- 33333333: Internal server error (500)"
+					},
+					"response": [
+						{
+							"name": "High Credit Score Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{experian_base_url}}/api/v1/credit-score?taxIdentifier=12345678",
+									"host": [
+										"{{experian_base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"credit-score"
+									],
+									"query": [
+										{
+											"key": "taxIdentifier",
+											"value": "12345678"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"requestId\": \"req-12345678-abcd-1234-5678-1234567890ab\",\n  \"success\": true,\n  \"result\": {\n    \"businessHeader\": {\n      \"bin\": \"123456789\",\n      \"businessName\": \"Test Company Inc.\",\n      \"address\": \"123 Main St, New York, NY 10001\",\n      \"phone\": \"+1-555-123-4567\",\n      \"taxId\": \"12345678\",\n      \"websiteUrl\": \"https://testcompany.com\",\n      \"legalBusinessName\": \"Test Company Incorporated\",\n      \"dbaNames\": [\"Test Co\", \"TC Inc\"]\n    },\n    \"commercialScore\": {\n      \"score\": 800,\n      \"recommendedCreditLimitAmount\": 150000\n    }\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Credit Score - Low Score",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{experian_base_url}}/api/v1/credit-score?taxIdentifier=98765432",
+							"host": [
+								"{{experian_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"credit-score"
+							],
+							"query": [
+								{
+									"key": "taxIdentifier",
+									"value": "98765432",
+									"description": "Business tax identifier for low credit score"
+								}
+							]
+						},
+						"description": "Get low credit score from Experian mock API"
+					},
+					"response": [
+						{
+							"name": "Low Credit Score Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{experian_base_url}}/api/v1/credit-score?taxIdentifier=98765432",
+									"host": [
+										"{{experian_base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"credit-score"
+									],
+									"query": [
+										{
+											"key": "taxIdentifier",
+											"value": "98765432"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"requestId\": \"req-98765432-abcd-1234-5678-1234567890ab\",\n  \"success\": true,\n  \"result\": {\n    \"businessHeader\": {\n      \"bin\": \"987654321\",\n      \"businessName\": \"Risky Business LLC\",\n      \"address\": \"456 Risk Ave, Chicago, IL 60601\",\n      \"phone\": \"+1-555-987-6543\",\n      \"taxId\": \"98765432\",\n      \"websiteUrl\": \"https://riskybusiness.com\",\n      \"legalBusinessName\": \"Risky Business Limited Liability Company\",\n      \"dbaNames\": []\n    },\n    \"commercialScore\": {\n      \"score\": 300,\n      \"recommendedCreditLimitAmount\": 0\n    }\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Credit Score - Business Not Found",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{experian_base_url}}/api/v1/credit-score?taxIdentifier=44444444",
+							"host": [
+								"{{experian_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"credit-score"
+							],
+							"query": [
+								{
+									"key": "taxIdentifier",
+									"value": "44444444",
+									"description": "Tax identifier for business not found scenario"
+								}
+							]
+						},
+						"description": "Test business not found scenario from Experian mock API"
+					},
+					"response": [
+						{
+							"name": "Business Not Found Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{experian_base_url}}/api/v1/credit-score?taxIdentifier=44444444",
+									"host": [
+										"{{experian_base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"credit-score"
+									],
+									"query": [
+										{
+											"key": "taxIdentifier",
+											"value": "44444444"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"requestId\": \"req-44444444-abcd-1234-5678-1234567890ab\",\n  \"success\": false,\n  \"result\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Credit Score - Service Unavailable",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{experian_base_url}}/api/v1/credit-score?taxIdentifier=22222222",
+							"host": [
+								"{{experian_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"credit-score"
+							],
+							"query": [
+								{
+									"key": "taxIdentifier",
+									"value": "22222222",
+									"description": "Tax identifier that triggers 503 error"
+								}
+							]
+						},
+						"description": "Test service unavailable (503) error from Experian mock API"
+					},
+					"response": [
+						{
+							"name": "Service Unavailable Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{experian_base_url}}/api/v1/credit-score?taxIdentifier=22222222",
+									"host": [
+										"{{experian_base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"credit-score"
+									],
+									"query": [
+										{
+											"key": "taxIdentifier",
+											"value": "22222222"
+										}
+									]
+								}
+							},
+							"status": "Service Unavailable",
+							"code": 503,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"error\": \"Service temporarily unavailable\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Credit Score - Internal Server Error",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{experian_base_url}}/api/v1/credit-score?taxIdentifier=33333333",
+							"host": [
+								"{{experian_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"credit-score"
+							],
+							"query": [
+								{
+									"key": "taxIdentifier",
+									"value": "33333333",
+									"description": "Tax identifier that triggers 500 error"
+								}
+							]
+						},
+						"description": "Test internal server error (500) from Experian mock API"
+					},
+					"response": [
+						{
+							"name": "Internal Server Error Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{experian_base_url}}/api/v1/credit-score?taxIdentifier=33333333",
+									"host": [
+										"{{experian_base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"credit-score"
+									],
+									"query": [
+										{
+											"key": "taxIdentifier",
+											"value": "33333333"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"error\": \"Internal server error from Experian\"\n}"
+						}
+					]
+				},
+				{
+					"name": "WireMock Admin - Get All Mappings",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{experian_base_url}}/__admin/mappings",
+							"host": [
+								"{{experian_base_url}}"
+							],
+							"path": [
+								"__admin",
+								"mappings"
+							]
+						},
+						"description": "Get all WireMock stub mappings. Useful for debugging and verifying configured stubs."
+					},
+					"response": []
+				},
+				{
+					"name": "WireMock Admin - Reset All Stubs",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{experian_base_url}}/__admin/mappings/reset",
+							"host": [
+								"{{experian_base_url}}"
+							],
+							"path": [
+								"__admin",
+								"mappings",
+								"reset"
+							]
+						},
+						"description": "Reset all WireMock stub mappings to default state. Useful for cleaning up test data."
+					},
+					"response": []
+				}
+			],
+			"description": "Experian mock API endpoints powered by WireMock. These endpoints simulate the Experian Commercial Scores API for testing purposes.\n\n**Available Test Scenarios:**\n- High credit score (800): taxIdentifier=12345678\n- Low credit score (300): taxIdentifier=98765432\n- Business not found: taxIdentifier=44444444\n- Timeout (31s): taxIdentifier=11111111\n- Service unavailable (503): taxIdentifier=22222222\n- Internal server error (500): taxIdentifier=33333333\n\n**WireMock Admin Endpoints:**\nUse the admin endpoints to inspect and manage stub mappings during development and testing."
+		},
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Application Health",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/actuator/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"actuator",
+								"health"
+							]
+						},
+						"description": "Check the health status of the application"
+					},
+					"response": [
+						{
+							"name": "Healthy Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/actuator/health",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"actuator",
+										"health"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status\": \"UP\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Health check endpoints for monitoring application status"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080/api",
+			"type": "string"
+		},
+		{
+			"key": "experian_base_url",
+			"value": "http://localhost:8089",
+			"type": "string"
+		},
+		{
+			"key": "customer_id",
+			"value": "123e4567-e89b-12d3-a456-426614174000",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "456e7890-e12b-34d5-a678-901234567890",
+			"type": "string"
+		}
+	]
+}

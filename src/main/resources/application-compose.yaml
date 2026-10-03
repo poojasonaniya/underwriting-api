@@ -1,0 +1,46 @@
+# Docker Compose specific configuration
+# This profile is activated when SPRING_PROFILES_ACTIVE=compose
+
+spring:
+  datasource:
+    # Override with docker-compose PostgreSQL connection
+    url: ${POSTGRES_URL:jdbc:postgresql://postgres:5432/underwriting}
+    username: ${POSTGRES_USERNAME:underwriting_user}
+    password: ${POSTGRES_PASSWORD:underwriting_pass}
+    hikari:
+      maximum-pool-size: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  jpa:
+    # Enable SQL logging for development
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+        enable_lazy_load_no_trans: true
+        temp:
+          use_jdbc_metadata_defaults: false
+
+# Logging configuration for docker environment
+logging:
+  level:
+    com.ratiotech.underwriting: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+# Management endpoints for health checks
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always

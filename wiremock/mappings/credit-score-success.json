@@ -1,0 +1,38 @@
+{
+  "priority": 5,
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/credit-score",
+    "queryParameters": {
+      "taxIdentifier": {
+        "matches": "^[0-9]+$"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "requestId": "{{randomValue type='UUID'}}",
+      "success": true,
+      "result": {
+        "businessHeader": {
+          "bin": "BIN{{request.query.taxIdentifier.[0:6]}}",
+          "businessName": "Sample Business Inc.",
+          "address": "123 Main St, Suite 100, New York, NY 10001",
+          "phone": "+1-555-0100",
+          "taxId": "{{request.query.taxIdentifier}}",
+          "websiteUrl": "https://www.samplebusiness.com",
+          "legalBusinessName": "Sample Business Incorporated",
+          "dbaNames": ["Sample Co", "SB Inc"]
+        },
+        "commercialScore": {
+          "score": 750,
+          "recommendedCreditLimitAmount": 100000
+        }
+      }
+    }
+  }
+}

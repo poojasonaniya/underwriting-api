@@ -1,0 +1,23 @@
+{
+  "priority": 2,
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/credit-score",
+    "queryParameters": {
+      "taxIdentifier": {
+        "equalTo": "00000000"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "requestId": "{{randomValue type='UUID'}}",
+      "success": false,
+      "result": null
+    }
+  }
+}

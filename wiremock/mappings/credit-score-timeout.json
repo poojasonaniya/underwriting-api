@@ -1,0 +1,39 @@
+{
+  "priority": 4,
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/credit-score",
+    "queryParameters": {
+      "taxIdentifier": {
+        "equalTo": "77777777"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "fixedDelayMilliseconds": 31000,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "requestId": "{{randomValue type='UUID'}}",
+      "success": true,
+      "result": {
+        "businessHeader": {
+          "bin": "BIN777777",
+          "businessName": "Slow Response Company",
+          "address": "789 Delay St, Chicago, IL 60601",
+          "phone": "+1-555-0300",
+          "taxId": "77777777",
+          "websiteUrl": "https://www.slowcompany.com",
+          "legalBusinessName": "Slow Response Company LLC",
+          "dbaNames": []
+        },
+        "commercialScore": {
+          "score": 650,
+          "recommendedCreditLimitAmount": 50000
+        }
+      }
+    }
+  }
+}

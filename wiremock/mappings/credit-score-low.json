@@ -1,0 +1,38 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/credit-score",
+    "queryParameters": {
+      "taxIdentifier": {
+        "equalTo": "99999999"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "requestId": "{{randomValue type='UUID'}}",
+      "success": true,
+      "result": {
+        "businessHeader": {
+          "bin": "BIN999999",
+          "businessName": "Risky Business LLC",
+          "address": "456 Risk Ave, Los Angeles, CA 90001",
+          "phone": "+1-555-0200",
+          "taxId": "99999999",
+          "websiteUrl": "https://www.riskybusiness.com",
+          "legalBusinessName": "Risky Business Limited Liability Company",
+          "dbaNames": []
+        },
+        "commercialScore": {
+          "score": 300,
+          "recommendedCreditLimitAmount": 0
+        }
+      }
+    }
+  }
+}

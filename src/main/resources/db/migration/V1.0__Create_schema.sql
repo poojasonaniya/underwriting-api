@@ -1,0 +1,2 @@
+CREATE SCHEMA tenants;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

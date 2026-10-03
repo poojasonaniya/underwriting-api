@@ -1,0 +1,23 @@
+{
+  "priority": 3,
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/credit-score",
+    "queryParameters": {
+      "taxIdentifier": {
+        "equalTo": "88888888"
+      }
+    }
+  },
+  "response": {
+    "status": 500,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "error": "Internal server error",
+      "status": 500,
+      "timestamp": "{{now format='yyyy-MM-dd'T'HH:mm:ss'Z'}}"
+    }
+  }
+}
