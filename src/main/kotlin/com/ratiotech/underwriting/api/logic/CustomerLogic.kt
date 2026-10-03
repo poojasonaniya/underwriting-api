@@ -4,6 +4,7 @@ import com.github.fge.jsonpatch.JsonPatch
 import com.ratiotech.underwriting.api.controllers.requests.CreateCustomerRequest
 import com.ratiotech.underwriting.api.controllers.requests.UpdateCustomerModel
 import com.ratiotech.underwriting.api.controllers.responses.Customer
+import com.ratiotech.underwriting.api.controllers.responses.PagedResponse
 import com.ratiotech.underwriting.api.entities.CustomerEntity
 import com.ratiotech.underwriting.api.logic.translators.CustomerTranslator
 import com.ratiotech.underwriting.api.repositories.CustomerRepository
@@ -14,6 +15,8 @@ import com.ratiotech.underwriting.api.shared.logic.JsonPatchManager
 import java.util.UUID
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 
 @Component
 class CustomerLogic
@@ -78,6 +81,13 @@ class CustomerLogic
     return customerTranslator.toModel(customerEntity)
   }
 
+  @Transactional(readOnly = true)
+  fun getCustomersPage(page: Int, size: Int, sort: String?): PagedResponse<Customer> {
+    val pageable = PageRequest.of(page, size, parseSort(sort))
+    val customersPage = customerRepository.findAll(pageable).map { customerTranslator.toModel(it) }
+    return PagedResponse.from(customersPage)
+  }
+
   /**
    * Patches a customer using JSON Patch operations.
    *
@@ -126,5 +136,46 @@ class CustomerLogic
 
     // Delete the customer
     customerRepository.deleteById(customerId)
+  }
+
+    /**
+   * Parses a sort expression such as `name,desc` into a [Sort].
+   *
+   * @param sort the sort expression, or null/blank for the default sort
+   * @return the [Sort] to apply, always ending with `id` ascending as a tie-breaker
+   * @throws BadRequestException if the field is not sortable or the direction is invalid
+   */
+  private fun parseSort(sort: String?): Sort {
+    if (sort.isNullOrBlank()) {
+      return Sort.by(Sort.Order.asc(DEFAULT_SORT_FIELD), Sort.Order.asc(ID_FIELD))
+    }
+
+    val parts = sort.split(",").map { it.trim() }
+    if (parts.size > 2) {
+      throw BadRequestException("Invalid sort '$sort'. Expected format: field,direction")
+    }
+
+    val field = parts[0]
+    if (field !in SORTABLE_FIELDS) {
+      throw BadRequestException(
+        "Invalid sort field '$field'. Allowed fields: ${SORTABLE_FIELDS.joinToString()}"
+      )
+    }
+
+    val direction =
+      parts.getOrNull(1)?.let {
+        Sort.Direction.fromOptionalString(it).orElseThrow {
+          BadRequestException("Invalid sort direction '$it'. Allowed values: asc, desc")
+        }
+      } ?: Sort.Direction.ASC
+
+    return Sort.by(Sort.Order(direction, field), Sort.Order.asc(ID_FIELD))
+  }
+
+  companion object {
+    private const val ID_FIELD = "id"
+    private const val DEFAULT_SORT_FIELD = "createdDate"
+    private val SORTABLE_FIELDS =
+      setOf("name", "taxIdentifier", "createdDate", "lastModifiedDate")
   }
 }
