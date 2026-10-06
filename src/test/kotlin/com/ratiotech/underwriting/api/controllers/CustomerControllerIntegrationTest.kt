@@ -3,6 +3,7 @@ package com.ratiotech.underwriting.api.controllers
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ratiotech.underwriting.api.controllers.requests.CreateCustomerRequest
 import com.ratiotech.underwriting.api.controllers.responses.Customer
+import com.ratiotech.underwriting.api.controllers.responses.PagedResponse
 import com.ratiotech.underwriting.api.entities.CustomerEntity
 import com.ratiotech.underwriting.api.shared.IntegrationTestBase
 import com.ratiotech.underwriting.api.shared.constants.Constants.SYSTEM_IDENTITY
@@ -34,6 +35,8 @@ class CustomerControllerIntegrationTest : IntegrationTestBase() {
   @Autowired private lateinit var customerJacksonTester: JacksonTester<Customer>
   @Autowired private lateinit var customerListJacksonTester: JacksonTester<List<Customer>>
   @Autowired private lateinit var problemDetailJacksonTester: JacksonTester<ProblemDetail>
+  @Autowired
+  private lateinit var pagedCustomerJacksonTester: JacksonTester<PagedResponse<Customer>>
 
   override fun beforeEach() {
     // Additional setup if needed
@@ -378,6 +381,309 @@ class CustomerControllerIntegrationTest : IntegrationTestBase() {
       assertEquals(SYSTEM_IDENTITY, c.lastModifiedBy)
       assertNotNull(c.lastModifiedDate)
     }
+  }
+
+  @Nested
+  inner class GetCustomersPageTest {
+
+    @Test
+    fun `should return first page with default size`() {
+      // Given
+      createCustomers(25)
+
+      // When
+      val response = getPage(sort = "name,asc")
+
+      // Then
+      assertEquals(20, response.content.size)
+      assertEquals("Customer 01", response.content.first().name)
+      assertEquals("Customer 20", response.content.last().name)
+      assertEquals(0, response.page.number)
+      assertEquals(20, response.page.size)
+      assertEquals(25, response.page.totalElements)
+      assertEquals(2, response.page.totalPages)
+    }
+
+    @Test
+    fun `should return middle page`() {
+      // Given
+      createCustomers(25)
+
+      // When
+      val response = getPage(page = "1", size = "10", sort = "name,asc")
+
+      // Then
+      assertEquals(10, response.content.size)
+      assertEquals("Customer 11", response.content.first().name)
+      assertEquals("Customer 20", response.content.last().name)
+      assertEquals(1, response.page.number)
+      assertEquals(10, response.page.size)
+      assertEquals(25, response.page.totalElements)
+      assertEquals(3, response.page.totalPages)
+    }
+
+    @Test
+    fun `should return last page with remaining items`() {
+      // Given
+      createCustomers(25)
+
+      // When
+      val response = getPage(page = "2", size = "10", sort = "name,asc")
+
+      // Then
+      assertEquals(
+        listOf("Customer 21", "Customer 22", "Customer 23", "Customer 24", "Customer 25"),
+        response.content.map { it.name },
+      )
+      assertEquals(2, response.page.number)
+      assertEquals(25, response.page.totalElements)
+      assertEquals(3, response.page.totalPages)
+    }
+
+    @Test
+    fun `should respect size parameter`() {
+      // Given
+      createCustomers(10)
+
+      // When
+      val response = getPage(size = "3")
+
+      // Then
+      assertEquals(3, response.content.size)
+      assertEquals(3, response.page.size)
+      assertEquals(10, response.page.totalElements)
+      assertEquals(4, response.page.totalPages)
+    }
+
+    @Test
+    fun `should not return the same customer on two pages`() {
+      // Given
+      val saved = createCustomers(7)
+
+      // When
+      val ids = (0..2).flatMap { page -> getPage(page = "$page", size = "3").content.map { it.id } }
+
+      // Then
+      assertEquals(7, ids.size)
+      assertEquals(saved.map { it.id }.toSet(), ids.toSet())
+    }
+
+    @Test
+    fun `should return customers with all fields populated`() {
+      // Given
+      val saved = createCustomers(1).first()
+
+      // When
+      val customer = getPage().content.single()
+
+      // Then
+      assertEquals(saved.id, customer.id)
+      assertEquals("Customer 01", customer.name)
+      assertEquals("TAX01", customer.taxIdentifier)
+      assertNotNull(customer.createdDate)
+      assertEquals(SYSTEM_IDENTITY, customer.createdBy)
+      assertEquals(SYSTEM_IDENTITY, customer.lastModifiedBy)
+      assertNotNull(customer.lastModifiedDate)
+    }
+
+    @Test
+    fun `should sort by name ascending`() {
+      // Given
+      createCustomers(5)
+
+      // When
+      val response = getPage(sort = "name,asc")
+
+      // Then
+      assertEquals(
+        listOf("Customer 01", "Customer 02", "Customer 03", "Customer 04", "Customer 05"),
+        response.content.map { it.name },
+      )
+    }
+
+    @Test
+    fun `should sort by name descending`() {
+      // Given
+      createCustomers(5)
+
+      // When
+      val response = getPage(sort = "name,desc")
+
+      // Then
+      assertEquals(
+        listOf("Customer 05", "Customer 04", "Customer 03", "Customer 02", "Customer 01"),
+        response.content.map { it.name },
+      )
+    }
+
+    @Test
+    fun `should sort ascending when direction is omitted`() {
+      // Given
+      createCustomers(3)
+
+      // When
+      val response = getPage(sort = "name")
+
+      // Then
+      assertEquals(
+        listOf("Customer 01", "Customer 02", "Customer 03"),
+        response.content.map { it.name },
+      )
+    }
+
+    @Test
+    fun `should accept upper case sort direction`() {
+      // Given
+      createCustomers(3)
+
+      // When
+      val response = getPage(sort = "name,DESC")
+
+      // Then
+      assertEquals(
+        listOf("Customer 03", "Customer 02", "Customer 01"),
+        response.content.map { it.name },
+      )
+    }
+
+    @Test
+    fun `should sort by tax identifier descending`() {
+      // Given
+      createCustomers(3)
+
+      // When
+      val response = getPage(sort = "taxIdentifier,desc")
+
+      // Then
+      assertEquals(listOf("TAX03", "TAX02", "TAX01"), response.content.map { it.taxIdentifier })
+    }
+
+    @Test
+    fun `should return empty content when no customers exist`() {
+      // When
+      val response = getPage()
+
+      // Then
+      assertTrue(response.content.isEmpty())
+      assertEquals(0, response.page.number)
+      assertEquals(20, response.page.size)
+      assertEquals(0, response.page.totalElements)
+      assertEquals(0, response.page.totalPages)
+    }
+
+    @Test
+    fun `should return empty content when page is beyond last page`() {
+      // Given
+      createCustomers(5)
+
+      // When
+      val response = getPage(page = "5", size = "10")
+
+      // Then
+      assertTrue(response.content.isEmpty())
+      assertEquals(5, response.page.number)
+      assertEquals(5, response.page.totalElements)
+      assertEquals(1, response.page.totalPages)
+    }
+
+    @Test
+    fun `should return 400 when page is negative`() {
+      mockMvc.perform(get(CUSTOMERS_PAGED_PATH).param("page", "-1")).andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun `should return 400 when size is zero`() {
+      mockMvc.perform(get(CUSTOMERS_PAGED_PATH).param("size", "0")).andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun `should return 400 when size is greater than 100`() {
+      mockMvc
+        .perform(get(CUSTOMERS_PAGED_PATH).param("size", "101"))
+        .andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun `should return 400 when page is not a number`() {
+      mockMvc.perform(get(CUSTOMERS_PAGED_PATH).param("page", "abc")).andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun `should return 400 when sort field is not allowed`() {
+      // When
+      val problem = getBadRequest(sort = "password,asc")
+
+      // Then
+      assertEquals(HttpStatus.BAD_REQUEST.value(), problem.status)
+      assertEquals(
+        "Invalid sort field 'password'. Allowed fields: name, taxIdentifier, createdDate, lastModifiedDate",
+        problem.detail,
+      )
+    }
+
+    @Test
+    fun `should return 400 when sort direction is invalid`() {
+      // When
+      val problem = getBadRequest(sort = "name,sideways")
+
+      // Then
+      assertEquals(HttpStatus.BAD_REQUEST.value(), problem.status)
+      assertEquals("Invalid sort direction 'sideways'. Allowed values: asc, desc", problem.detail)
+    }
+
+    @Test
+    fun `should return 400 when sort has too many parts`() {
+      // When
+      val problem = getBadRequest(sort = "name,asc,extra")
+
+      // Then
+      assertEquals(HttpStatus.BAD_REQUEST.value(), problem.status)
+      assertEquals(
+        "Invalid sort 'name,asc,extra'. Expected format: field,direction",
+        problem.detail,
+      )
+    }
+
+    /** Saves [count] customers named "Customer 01", "Customer 02", ... so text order matches number order. */
+    private fun createCustomers(count: Int): List<CustomerEntity> =
+      customerRepository.saveAll(
+        (1..count).map { i ->
+          CustomerEntity(
+            name = "Customer %02d".format(i),
+            taxIdentifier = "TAX%02d".format(i),
+            createdBy = SYSTEM_IDENTITY,
+            lastModifiedBy = SYSTEM_IDENTITY,
+          )
+        }
+      )
+
+    /** Calls the paged endpoint, expects 200 OK and parses the body. Null params are not sent. */
+    private fun getPage(
+      page: String? = null,
+      size: String? = null,
+      sort: String? = null,
+    ): PagedResponse<Customer> {
+      val result =
+        mockMvc.perform(pagedRequest(page, size, sort)).andExpect(status().isOk).andReturn()
+      return pagedCustomerJacksonTester.parseObject(result.response.contentAsString)
+    }
+
+    /** Calls the paged endpoint, expects 400 Bad Request and parses the problem detail. */
+    private fun getBadRequest(sort: String): ProblemDetail {
+      val result =
+        mockMvc
+          .perform(pagedRequest(sort = sort))
+          .andExpect(status().isBadRequest)
+          .andReturn()
+      return problemDetailJacksonTester.parseObject(result.response.contentAsString)
+    }
+
+    private fun pagedRequest(page: String? = null, size: String? = null, sort: String? = null) =
+      get(CUSTOMERS_PAGED_PATH).apply {
+        page?.let { param("page", it) }
+        size?.let { param("size", it) }
+        sort?.let { param("sort", it) }
+      }
   }
 
   @Nested
@@ -932,5 +1238,6 @@ class CustomerControllerIntegrationTest : IntegrationTestBase() {
   companion object {
     private const val CUSTOMERS_PATH = "/v1/customers"
     private const val CUSTOMERS_ID_PATH = "/v1/customers/%s"
+    private const val CUSTOMERS_PAGED_PATH = "/v1/customers/paged"
   }
 }
